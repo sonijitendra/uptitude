@@ -165,9 +165,9 @@ class TestPipelineIntegration:
             MockParser.return_value.parse_contract.side_effect = mock_parse
 
             mock_llm = MockLLM.return_value
-            mock_llm.generate.side_effect = lambda sp, up, rm: (
+            mock_llm.generate.side_effect = lambda *args, **kwargs: (
                 ClauseExtractionResponse(termination_clause="clause")
-                if rm == ClauseExtractionResponse
+                if kwargs.get("response_model", args[2] if len(args) > 2 else None) == ClauseExtractionResponse
                 else SummaryResponse(summary="Summary of the contract covering all key aspects " * 4)
             )
 
